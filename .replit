@@ -1,0 +1,65 @@
+modules = ["nodejs-20", "web", "postgresql-16"]
+
+[nix]
+channel = "stable-25_05"
+
+[agent]
+expertMode = true
+
+[userenv]
+
+[userenv.shared]
+ENABLE_SCHEDULER = "true"
+ENABLE_SUBSCRIPTIONS = "true"
+LOG_LEVEL = "info"
+MAILBOXES = "[{\"brand\":\"CD\",\"address\":\"care@carolsdaughter.com\",\"userId\":\"care@carolsdaughter.com\",\"displayName\":\"Carol's Daughter Care\"},{\"brand\":\"DB\",\"address\":\"support@dermablend.com\",\"userId\":\"support@dermablend.com\",\"displayName\":\"Dermablend Support\"},{\"brand\":\"BOC\",\"address\":\"hello@baxterofcalifornia.com\",\"userId\":\"hello@baxterofcalifornia.com\",\"displayName\":\"Baxter of California\"},{\"brand\":\"AMBI\",\"address\":\"care@ambiskincare.com\",\"userId\":\"care@ambiskincare.com\",\"displayName\":\"Ambi Care\"},{\"brand\":\"AF\",\"address\":\"help@acnefree.com\",\"userId\":\"help@acnefree.com\",\"displayName\":\"AcneFree Care\"}]"
+NODE_ENV = "development"
+PORT = "8000"
+PUBLIC_BASE_URL = "https://ac1d697c-53eb-407f-ba63-b1c6c01161c3-00-2mzfp4ehv6ia3.riker.replit.dev"
+RECONCILE_INTERVAL_MS = "900000"
+SCHEDULER_INTERVAL_MS = "300000"
+SUBSCRIPTION_RENEW_LEAD_MS = "86400000"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Frontend"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Backend"
+
+[[workflows.workflow]]
+name = "Frontend"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow]]
+name = "Backend"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run server:dev"
+waitForPort = 8000
+
+[[ports]]
+localPort = 5000
+externalPort = 80
